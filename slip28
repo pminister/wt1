@@ -1,0 +1,120 @@
+Q. 1) Write a PHP script using AJAX concept, to check user name and password are valid or Invalid (use
+    database to store user name and password).
+
+
+
+CREATE DATABASE user_db;
+USE user_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (username, password) VALUES
+('admin', '12345'),
+('user1', 'password1');
+
+
+
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form onsubmit="validate(event)">
+    name:<input type="text" id="name">
+   
+    password:<input type="text" id="password">
+    <input type="submit">
+  </form>
+  <h3 id="msg"></h3>
+  <script>
+    function validate(event){
+      event.preventDefault();
+      const name=document.getElementById("name").value;
+      const password=document.getElementById("password").value;
+      const msg=document.getElementById("msg");
+      const xhr=new XMLHttpRequest();
+      xhr.open("GET",`slip28.php?name=${name}&password=${password}`,true);
+      xhr.onload=function()
+      {
+        if(xhr.status===200)
+      {
+          msg.innerText=xhr.responseText;
+      }
+      else{
+
+        msg.innerText="error"
+      }
+      }
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+//validate_login.php
+<?php
+$conn = pg_connect("host=localhost dbname=onkar user=onkar password=onkar123");
+if (!$conn) {
+    die("Connection failed: " . pg_last_error());
+}
+if(isset($_GET['name'])&&  isset($_GET['password']))
+{
+$q="select * from users";
+$rs=pg_query($q);
+ while($r=pg_fetch_row($rs))
+ {
+  if($r[0]===$_GET['name']&& $r[1]===$_GET['password'])
+  {
+    echo("successfully login");
+    return;
+  }
+ }
+ echo"enter wrong username and password";
+}
+?>+
+
+
+
+
+
+Q. 2 ) Build a simple linear regression model for Car Dataset.
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+data = {
+    'Car_Age': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],                                                   
+    'Car_Price': [500000, 450000, 400000, 350000, 300000, 250000, 200000, 150000, 100000, 50000]  
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Car_Age']].values  
+Y = df['Car_Price'].values  
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+print("X_train:\n", X_train)
+print("y_train:\n", y_train)
+print("X_test:\n", X_test)
+print("y_test:\n", y_test)
+
+print("Coefficients:", regressor.coef_)
+print("Intercept:", regressor.intercept_)

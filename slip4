@@ -1,0 +1,135 @@
+Q. 1) Write a PHP script to accept Employee details (Eno, Ename, Address) on first page. On second
+      page accept earning (Basic, DA, HRA). On third page print Employee information (Eno, Ename, Address,
+      Basic, DA, HRA, Total) [ Use Session]
+
+
+//main.php
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>first page</title>
+</head>
+<body>
+
+<form action="slip4.php" method="post">
+<lable for="eno" >ENO:</label>
+<input type="text" name="eno">
+<lable for="ename" >ENAME:</label>
+<input type="text" name="ename">
+<lable for="add" >ADD:</label>
+<input type="text" name="add">
+<input type="submit" name="submit">
+</form>
+</body>
+</html>
+
+
+
+//secondpage.php
+
+<?php
+session_start();
+
+if(isset($_POST['eno']) && isset($_POST['ename']) && isset($_POST['add'])){
+$_SESSION['eno']=$_POST['eno'];
+$_SESSION['ename']=$_POST['ename'];
+$_SESSION['add']=$_POST['add'];
+
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Second page</title</title>
+</head>
+<body>
+
+<form action="slip43.php" method="post">
+
+<lable for="basic" >Basic:</label>
+<input type="text" name="basic">
+<lable for="da" >DA:</label>
+<input type="text" name="da">
+<lable for="hra" >HRA:</label>
+<input type="text" name="hra">
+<input type="submit" name="submit">
+</form>
+</body>
+</html>
+
+
+//thirdpage.php
+
+<?php 
+session_start();
+
+if(isset($_POST['basic']) && isset($_POST['da']) && isset($_POST['hra'])){
+$_SESSION['basic']=$_POST['basic'];
+$_SESSION['da']=$_POST['da'];
+$_SESSION['hra']=$_POST['hra'];
+}
+
+$total = $_SESSION['basic'] + $_SESSION['da'] + $_SESSION['hra'];
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FINAL PAGE</title>
+</head>
+<body>
+    <h1>EMPLOYEE DETAIL</h1>
+
+    <p>ENO: <?php echo  $_SESSION['eno']; ?></p>
+    <br>
+    <p>ENAME: <?php echo $_SESSION['ename']; ?></p>
+    <br>
+    <p>ADD: <?php echo $_SESSION['add']; ?></p>
+    <br>
+    <p>BASIC: <?php echo $_SESSION['basic']; ?></p>
+    <br>
+    <p>DA: <?php echo $_SESSION['da']; ?></p>
+    <br>
+    <p>HRA: <?php echo $_SESSION['hra']; ?></p>
+    <br>
+    <p>TOTAL: <?php echo $total; ?></p>
+    <br>
+</body>
+</html>
+
+
+
+
+
+Q. 2)Build a simple linear regression model for Fish Species Weight Prediction.
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+data = {
+    'Species': ['Salmon', 'Tuna', 'Trout', 'Catfish', 'Bass', 'Mackerel'],
+    'Length': [30, 50, 40, 35, 45, 55],  # Independent Variable (in cm)
+    'Weight': [2.5, 6.0, 4.0, 3.2, 5.5, 7.0]  # Target Variable (in kg)
+}
+
+df = pd.DataFrame(data)
+
+X = df[['Length']].values  
+Y = df['Weight'].values  
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+print("X_train:\n", X_train)
+print("y_train:\n", y_train)
+print("X_test:\n", X_test)
+print("y_test:\n", y_test)
+print("Coefficients:", regressor.coef_)
+print("Intercept:", regressor.intercept_)

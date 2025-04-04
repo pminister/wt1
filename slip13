@@ -1,0 +1,69 @@
+Q. 1) Write AJAX program where the user is requested to write his or her name in
+a text box, and the server keeps sending back responses while the user is
+typing. If the user name is not entered then the message displayed will be,
+“Stranger, please tell me your name!”. If the name is Rohit, Virat, Dhoni,
+Ashwin or Harbhajan , the server responds with “Hello, master !”. If the name is
+anything else, the message will be “, I don’t know you!” // slip13.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>greet</title>
+  </head>
+  <body>
+    <p>enter name:</p>
+    <input type="text" name="name" id="name" oninput="message()" />
+    <p id="msg"></p>
+
+    <script>
+      function message() {
+        const name = document.getElementById("name").value.trim();
+        const msg = document.getElementById("msg");
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `slip13.php?name=${name}`, true);
+        xhr.onload = function () {
+          if (xhr.status === 200) msg.innerHTML = xhr.responseText;
+          else msg.innerHTML = "error";
+        };
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
+
+//slip13.php
+
+<?php
+if(isset($_GET['name']))
+{
+  $name=$_GET['name'];  
+$player=['rohit','virat', 'Dhoni',
+'Ashwin','Harbhajan'];
+if($name=="")
+{
+  echo"Stranger please tell me your name";
+}
+  else if(in_array($name,$player))
+  {
+    echo" $name heelo master";
+  }
+  else{
+    echo"Stranger $name i dont know you";
+  }
+
+}
+?>
+
+Q.2)Download nursery dataset from UCI. Build a linear regression model by
+identifying independent and target variable. Split the variables into training
+and testing sets and print them. Build a simple linear regression model for
+predicting purchases. import numpy as np import pandas as pd from
+sklearn.model_selection import train_test_split from sklearn.linear_model import
+LinearRegression data = { 'Experience': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+'Purchase_Amount': [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+} df = pd.DataFrame(data) X = df[['Experience']].values Y =
+df['Purchase_Amount'].values X_train, X_test, y_train, y_test =
+train_test_split(X, Y, test_size=0.3, random_state=0) regressor =
+LinearRegression() regressor.fit(X_train, y_train) print("X_train:\n", X_train)
+print("y_train:\n", y_train) print("X_test:\n", X_test) print("y_test:\n",
+y_test) print("Coefficients:", regressor.coef_) print("Intercept:",
+regressor.intercept_)

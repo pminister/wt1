@@ -1,0 +1,100 @@
+Q. 1) Create employee table as follows EMP (eno, ename, designation, salary). 
+      Write Ajax program to select the employees name and print the selected employee’s details.
+
+CREATE TABLE emp (
+  eno SERIAL PRIMARY KEY,
+  ename TEXT,
+  designation TEXT,
+  salary INT
+);
+
+INSERT INTO emp (ename, designation, salary) VALUES
+('Amit', 'Manager', 50000),
+('Neha', 'Clerk', 20000);
+
+
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+select name:
+  <select id="name" onchange="getDetails()">
+      <option value="">-- Select a emp --</option>
+      <option value="onkar">onkar</option>
+  </select>
+  <h3> Details:</h3>
+  <div id="Details"></div>
+  <script>
+    function getDetails(){
+      const name=document.getElementById("name").value;
+      const details=document.getElementById("Details");
+      const xhr= new XMLHttpRequest();
+      xhr.open("GET",`slip26.php?name=${name}`,true)
+      xhr.onload=function()
+      {
+        if(xhr.status===200)
+      {
+          details.innerHTML=xhr.responseText
+      }else{
+        details.innerHTML="error"
+      }
+      }
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
+
+
+//get_emp.php
+
+<?php
+$conn = pg_connect("host=localhost dbname=employees user=onkar password=onkar123");
+if (!$conn) {
+    die("Connection failed: " . pg_last_error());
+}
+if(isset($_GET['name']))
+{
+$q="select * from emp";
+$rs=pg_query($q);
+ while($r=pg_fetch_row($rs))
+ {
+  if($r[1]===$_GET['name'])
+  {
+    echo$r[0]." ".$r[1]." ".$r[2]."<br>";
+    return;
+  }
+ }
+ echo"enter wrong username and password";
+}
+?>
+
+
+
+
+Q.2
+
+import re  
+import nltk  
+from nltk.tokenize import sent_tokenize  
+from collections import Counter  
+
+text = """Hello all, Welcome to Python Programming Academy. Python  
+Programming Academy is a nice platform to learn new programming skills.  
+It is difficult to get enrolled in this Academy."""  
+
+text = re.sub(r"[^a-zA-Z\s]", "", text)  
+
+sentences = sent_tokenize(text)  
+
+word_frequencies = Counter(text.split())  
+
+summary = max(sentences, key=lambda s: sum(word_frequencies[word] for word in s.split()))  
+
+print("Summary:", summary)  

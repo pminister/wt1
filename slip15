@@ -1,0 +1,98 @@
+Q. 1) Write Ajax program to fetch suggestions when is user is typing in a textbox. 
+      (eg like google suggestions. Hint create array of suggestions and matching string will be displayed) 
+
+
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  Enter suggestion <input type="text" oninput="display()"id="input">
+  <p id="msg"></p>
+  <script>
+    function display()
+    {
+      const input=document.getElementById("input").value;
+      const msg=document.getElementById("msg");
+      const xhr=new XMLHttpRequest();
+      xhr.open("GET",`slip15.php?input=${input}`,true);
+      xhr.onload=function(){
+        if(xhr.status===200)
+      {
+            msg.innerHTML=xhr.responseText;
+      }
+      else{
+         msg.innerText="error";
+      }
+      }
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
+
+
+//slip15.php
+
+<?php
+// Sample array of suggestions
+$suggestions = ["apple", "banana", "orange", "grape", "pineapple", 
+                 "watermelon", "mango", "strawberry", "blueberry", "kiwi"];
+      if(isset($_GET['input']))
+      {
+        $match=[];
+        $input=$_GET['input'];
+        foreach($suggestions as $s)
+        {
+          if(stripos($s,$input)!==false)
+            $match[]=$s;
+        }
+        if(!empty($match))
+        {
+          foreach($match as $m)
+               echo $m."<br>";
+        }else{
+          echo"no suggestion";
+        }
+      }
+?>
+
+
+
+
+
+Q. 2)Create the following dataset in python & Convert the categorical values into numeric format.Apply 
+the apriori algorithm on the above dataset to generate the frequent itemsets and association rules. Repeat 
+the process with different min_sup values. 
+
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [
+    ['bread', 'milk'],
+    ['bread', 'diaper', 'beer', 'eggs'],
+    ['milk', 'diaper', 'beer', 'coke'],
+    ['bread', 'milk', 'diaper', 'beer'],
+    ['bread', 'milk', 'diaper', 'coke']
+]
+
+te = TransactionEncoder()
+df = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+min_sup_values = [0.2, 0.4, 0.6]
+
+for min_sup in min_sup_values:
+    print(f"\nMin Support: {min_sup}")
+    freq_items = apriori(df, min_support=min_sup, use_colnames=True)
+    rules = association_rules(freq_items, metric="lift", min_threshold=1)
+    
+    print("\nFrequent Itemsets:\n", freq_items)
+    print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])

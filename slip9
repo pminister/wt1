@@ -1,0 +1,77 @@
+Q. 1) Write a JavaScript function to validate username and password for a membership form
+
+//membership.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>validate</title>
+</head>
+<body>
+<script>
+function accept(){
+var name = document.getElementById('name').value;
+var pass = document.getElementById('pass').value;
+
+if(!name){
+alert("enter name properly");
+return false;
+}
+
+if(!pass || pass.length<8){
+alert("password must be 8 bit");
+return false;
+}
+
+alert("Login successfully..!!");
+return true;
+}
+
+
+</script>
+<form method="post" onsubmit="return accept();">
+<p>enter username :</p>
+<input type="text" id="name" placeholder="name">
+<p>enter password :</p>
+<input type="text" id="pass" placeholder="password">
+
+<input type="submit" name="submit">
+
+<body>
+</html>
+
+
+
+
+
+
+
+Q. 2)Create your own transactions dataset and apply the above process on your dataset.
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+transactions = [
+    ['item1', 'item2', 'item3'],
+    ['item2', 'item3'],
+    ['item1', 'item2', 'item4'],
+    ['item1', 'item4'],
+    ['item2', 'item3', 'item4'],
+    ['item1', 'item3', 'item4'],
+    ['item1', 'item2'],
+    ['item1', 'item3'],
+    ['item3', 'item4'],
+    ['item2', 'item4']
+]
+
+te = TransactionEncoder()
+df_encoded = pd.DataFrame(te.fit_transform(transactions), columns=te.columns_)
+
+freq_items = apriori(df_encoded, min_support=0.3, use_colnames=True)
+rules = association_rules(freq_items, metric="confidence", min_threshold=0.7)
+
+print("\nFrequent Itemsets:\n", freq_items)
+print("\nAssociation Rules:\n", rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']])
+

@@ -1,0 +1,104 @@
+Q. 1) Create web Application that contains Voters details and check proper validation for (name,
+      age, and nationality), as Name should be in upper case letters only, Age should not be less than
+      18 yrs and Nationality should be Indian.(use HTML-AJAX-PHP) 
+
+
+//index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form onsubmit="validate(event)">
+    name:<input type="text" id="name">
+    age:<input type="number" id="age">
+    nationality:<input type="text" id="nationality">
+    <input type="submit">
+  </form>
+  <h3 id="msg"></h3>
+  <script>
+    function validate(event){
+      event.preventDefault();
+      const name=document.getElementById("name").value;
+      const age=document.getElementById("age").value;
+      const nationality=document.getElementById("nationality").value;
+      const msg=document.getElementById("msg");
+      const xhr=new XMLHttpRequest();
+      xhr.open("GET",`slip27.php?name=${name}&age=${age}&nationality=${nationality}`,true);
+      msg.innerText=xhr
+      xhr.onload=function()
+      {
+        if(xhr.status===200)
+      {
+          msg.innerText=xhr.responseText;
+      }
+      else{
+
+        msg.innerText="error"
+      }
+      }
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
+
+
+
+//validate_voter.php
+
+<?php
+if(isset($_GET['name']) && isset($_GET['age'])&& isset($_GET['nationality']))
+{
+  $name=($_GET['name']);
+  $age=(int)($_GET['age']);
+  $nationality=($_GET['nationality']);
+  if(!preg_match("/^[A-Z ]+$/", $name) )
+  {
+   echo"enetr uppercase name";
+   return;
+  }
+  if($age<18)
+  {
+  echo"age should be greater than 18";
+  return;
+  }
+  if($nationality!="indian")
+  {
+    echo"nationality should be indian";
+    return;
+  }
+  echo"enter information is correct";
+}
+?>
+
+
+
+
+Q.2
+
+import pandas as pd  
+from mlxtend.preprocessing import TransactionEncoder  
+from mlxtend.frequent_patterns import apriori, association_rules  
+
+transactions = [  
+    ['milk', 'bread', 'butter'],  
+    ['bread', 'butter'],  
+    ['milk', 'bread', 'jam'],  
+    ['bread', 'butter', 'jam'],  
+    ['milk', 'butter']  
+]  
+
+te = TransactionEncoder()  
+te_ary = te.fit_transform(transactions)  
+df = pd.DataFrame(te_ary, columns=te.columns_)  
+
+frequent_itemsets = apriori(df, min_support=0.4, use_colnames=True)  
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)  
+
+print("Frequent Itemsets:\n", frequent_itemsets)  
+print("\nAssociation Rules:\n", rules)  

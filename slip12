@@ -1,0 +1,71 @@
+Q. 1) Write AJAX program to read contact.dat file and print the contents of the
+file in a tabular format when the user clicks on print button. Contact.dat file
+should contain srno, name, residence number, mobile number, Address. [Enter at
+least 3 record in contact.dat file] //ajax.html
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Data in contact.dat</h1>
+    <button onclick="loadData()">click me to fetch data</button>
+    <table id="table" border="1">
+      <tr>
+        <th>Sr. No</th>
+        <th>Name</th>
+        <th>Residence Number</th>
+        <th>Mobile Number</th>
+        <th>Address</th>
+      </tr>
+    </table>
+    <script>
+      function loadData(){
+        var xhr=new XMLHttpRequest();
+        var i;
+        xhr.open("GET","contact.dat");
+        const table=document.getElementById("table");
+        xhr.onload=function(){
+        if(xhr.status===200)
+        {
+          const lines = xhr.responseText.split("\n");
+          lines.forEach(line=>{
+            const [srno, name, resNumber, mobile, address]=line.split(",");
+            const row = "<tr>
+                                <td>${srno}</td>
+                                <td>${name}</td>
+                                <td>${resNumber}</td>
+                                <td>${mobile}</td>
+                                <td>${address}</td>
+                            </tr>";
+               table.innerHTML+=row;
+          })
+        }
+        else
+          alert("failed to load data");
+        }
+        xhr.send();
+
+      }
+    </script>
+  </body>
+</html>
+
+//contact.dat 1,John Doe,022-123456,9876543210,Mumbai 2,Jane
+Smith,022-654321,8765432109,Delhi 3,Alex Roy,022-789456,7654321098,Bangalore Q.2
+Create ‘heights-and-weights’ Data set . Build a linear regression model by
+identifying independent and target variable. Split the variables into training
+and testing sets and print them. Build a simple linear regression model for
+predicting purchases. import numpy as np import pandas as pd from
+sklearn.model_selection import train_test_split from sklearn.linear_model import
+LinearRegression data = { 'Height': [150, 160, 165, 170, 175, 180, 185, 190],
+'Weight': [50, 55, 60, 65, 70, 75, 80, 85] } df = pd.DataFrame(data) X =
+df[['Height']].values # Height Y = df['Weight'].values # Weight X_train, X_test,
+y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+regressor = LinearRegression() regressor.fit(X_train, y_train)
+print("X_train:\n", X_train) print("y_train:\n", y_train) print("X_test:\n",
+X_test) print("y_test:\n", y_test) print("Coefficients:", regressor.coef_)
+print("Intercept:", regressor.intercept_)

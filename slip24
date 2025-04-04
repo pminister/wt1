@@ -1,0 +1,79 @@
+Q. 1) Write a PHP script to create student.xml file which contains student roll no, name, address, college
+        and course. Print students detail of specific course in tabular format after accepting course as input.
+
+
+//student_course.php
+
+<?php
+// Step 1: Create student.xml file
+$xml = new SimpleXMLElement("<students></students>");
+$data = [
+  ["1", "Amit", "Pune", "MIT", "BCA"],
+  ["2", "Neha", "Mumbai", "SPPU", "BSc"],
+  ["3", "Raj", "Nashik", "COEP", "BCA"]
+];
+foreach ($data as $s) {
+  $student = $xml->addChild("student");
+  $student->addAttribute("roll", $s[0]);
+  $student->addChild("name", $s[1]);
+  $student->addChild("address", $s[2]);
+  $student->addChild("college", $s[3]);
+  $student->addChild("course", $s[4]);
+}
+$xml->asXML("student.xml");
+?>
+
+<form method="post">
+  Enter Course: <input type="text" name="course">
+  <input type="submit" value="Show">
+</form>
+
+
+
+
+
+//slip24.php
+
+<?php
+echo"Student Persuning:".$_POST["course"]."<br>";
+$xml=simplexml_load_file("student.xml");
+echo"<table border=1><tr><th>sname</th><th>saddr</th><th>colleg name</th></tr>";
+foreach($xml as $stud)
+{
+ 
+  if($stud->course==$_POST["course"])
+  {
+    echo"<tr>";
+  echo"<td>".$stud->sname."</td>";
+  echo"<td>".$stud->saddr."</td>";
+  echo"<td>".$stud->college."</td></tr>";
+  }
+}
+echo"</table>"
+?>
+
+
+
+
+
+Q. 2) Consider the following dataset : https://www.kaggle.com/datasets/datasnaek/youtube
+new?select=INvideos.csv  
+Write a Python script for the following :  
+i. Read the dataset and perform data cleaning operations on it. 
+ii.  ii. Find the total views, total likes, total dislikes and comment count. 
+
+
+import pandas as pd  
+
+df = pd.read_csv("INvideos.csv")  
+df = df.drop_duplicates().dropna()  
+
+total_views = df["views"].sum()  
+total_likes = df["likes"].sum()  
+total_dislikes = df["dislikes"].sum()  
+total_comments = df["comment_count"].sum()  
+
+print("Total Views:", total_views)  
+print("Total Likes:", total_likes)  
+print("Total Dislikes:", total_dislikes)  
+print("Total Comments:", total_comments)  
