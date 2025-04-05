@@ -40,26 +40,36 @@ echo("update successful");
 
 Q2
 
-import pandas as pd  
-import nltk  
-from nltk.tokenize import word_tokenize  
-from textblob import TextBlob  
+Import pandas as pd
+Import nltk
+From nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-df = pd.read_csv("covid_2021_1.csv")  
-df = df.drop_duplicates().dropna()  
+Df = pd.read_csv(‘covid_2021_1.csv’)
 
-df["tokenized_comments"] = df["comment"].apply(lambda x: word_tokenize(str(x)))  
 
-def get_sentiment(text):  
-    analysis = TextBlob(str(text)).sentiment.polarity  
-    return "Positive" if analysis > 0 else "Negative" if analysis < 0 else "Neutral"  
+Df.dropna(inplace=True)
+Df.drop_duplicates(subset=’Comment’, inplace=True)
 
-df["sentiment"] = df["comment"].apply(get_sentiment)  
 
-positive = (df["sentiment"] == "Positive").sum() / len(df) * 100  
-negative = (df["sentiment"] == "Negative").sum() / len(df) * 100  
-neutral = (df["sentiment"] == "Neutral").sum() / len(df) * 100  
+Nltk.download(‘punkt’)
+Df[‘tokens’] = df[‘Comment’].apply(nltk.word_tokenize)
 
-print("Positive Comments:", positive, "%")  
-print("Negative Comments:", negative, "%")  
-print("Neutral Comments:", neutral, "%")  
+
+Nltk.download(‘vader_lexicon’)
+Sia = SentimentIntensityAnalyzer()
+Df[‘sentiment’] = df[‘Comment’].apply(lambda x: sia.polarity_scores(x)[‘compound’])
+
+
+Total_comments = len(df)
+Positive_comments = len(df[df[‘sentiment’] > 0])
+Negative_comments = len(df[df[‘sentiment’] < 0])
+Neutral_comments = len(df[df[‘sentiment’] == 0])
+Positive_percentage = (positive_comments / total_comments) * 100
+Negative_percentage = (negative_comments / total_comments) * 100
+Neutral_percentage = (neutral_comments / total_comments) * 100
+
+
+Print(‘Total Comments:’, total_comments)
+Print(‘Positive Comments:’, positive_comments, ‘(‘, positive_percentage, ‘%)’)
+Print(‘Negative Comments:’, negative_comments, ‘(‘, negative_percentage, ‘%)’)
+Print(‘Neutral Comments:’, neutral_comments, ‘(‘, neutral_percentage, ‘%)’)
